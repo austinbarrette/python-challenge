@@ -1,26 +1,45 @@
 import os
 import csv
-
 csvpath = os.path.join('..','Resources','budget_data.csv')
 
-#create two lists for dates and revenue
-dates = []
-revenue = []
-change_in_revenue = []
-
-
-# open with path variable, new line data
+# Create lists for date, revenue & change in revenue
+total_dates = []
+total_revenue = []
+monthly_revenue_change = []
+ 
+# Open with path variable and newline data
 with open(csvpath, newline='') as csvfile:
-        csvreader =csv.reader(csvfile,delimiter=",")
+    csvreader =csv.reader(csvfile,delimiter=",") 
 
-        #Read & skip the header row first
-        csv_header = next(csvreader)
+    # Read and skip header row first
+    header = next(csvreader)  
+
+    # Iterate through the rows in the stored file contents
+    for row in csvreader: 
+
+        # Append each column to corresponding list - SUPER MEGA IMPORTANT
+        total_dates.append(row[0])
+        total_revenue.append(int(row[1]))
+
+    # Loop through the profits date by date to calculate monthly change 
+    for i in range(len(total_revenue)-1):
         
-        #Print Header
-        print("                  ")
-        print("Financial Analysis")
-        print("------------------")
+        # Store calculation of monthly revenue change
+        monthly_revenue_change.append(total_revenue[i+1]-total_revenue[i])
+        
+# Grab min & max values from monthly revenue change
+max_increase_value = max(monthly_revenue_change)
+max_decrease_value = min(monthly_revenue_change)
 
-        #Prints number of row in column one
-        row_count = sum(1 for row in csvreader)
-        print("Total Months: " + str(row_count))
+# Assign month to correspond to the min and max values from monthly revenue change
+max_increase_month = monthly_revenue_change.index(max(monthly_revenue_change)) + 1
+max_decrease_month = monthly_revenue_change.index(min(monthly_revenue_change)) + 1 
+
+# Print statements (moved to end of code for cleaner look)
+print("Financial Analysis")
+print("------------------")
+print(f"Total Months: {len(total_dates)}")
+print(f"Total: ${sum(total_revenue)}")
+print(f"Average Change: {round(sum(monthly_revenue_change)/len(monthly_revenue_change),2)}")
+print(f"Greatest Increase in Profits: {total_dates[max_increase_month]} (${(str(max_increase_value))})")
+print(f"Greatest Decrease in Profits: {total_dates[max_decrease_month]} (${(str(max_decrease_value))})")
