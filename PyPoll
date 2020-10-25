@@ -1,0 +1,63 @@
+import os
+import csv
+
+csvpath = os.path.join("..", "Resources", "election_data.csv")
+
+# Create Variables 
+total_votes = 0 
+vote_4_Kahn = 0
+vote_4_correy = 0
+vote_4_li = 0
+vote_4_otooley = 0
+
+# Open with path variable and newline data
+with open(csvpath,newline="") as csvfile:
+    csvreader = csv.reader(csvfile,delimiter=",") 
+
+    # Read and skip header row first
+    header = next(csvreader)     
+
+    # read rows in csvreader
+    for row in csvreader: 
+
+        # count all voter IDs
+        total_votes +=1
+
+        # Run through row 2 (candidate name) to count number of time each name appears
+        # Store that number in set variable from above
+        if row[2] == "Khan": 
+            vote_4_Kahn +=1
+        elif row[2] == "Correy":
+            vote_4_correy +=1
+        elif row[2] == "Li": 
+            vote_4_li +=1
+        elif row[2] == "O'Tooley":
+            vote_4_otooley +=1
+
+ # Make list of candidate names to begin determining winner
+candidates = ["Khan", "Correy", "Li","O'Tooley"]
+totes_votes = [vote_4_Kahn, vote_4_correy,vote_4_li,vote_4_otooley]
+
+# Use zip and dict functions to tie candidate names with corresponding votes 
+# Use max function to determine winner
+dict_candidates_and_totes_votes = dict(zip(candidates,totes_votes))
+key = max(dict_candidates_and_totes_votes, key=dict_candidates_and_totes_votes.get)
+
+# Calculate % of total votes by candidate
+khan_percent = (vote_4_Kahn/total_votes) *100
+correy_percent = (vote_4_correy/total_votes) * 100
+li_percent = (vote_4_li/total_votes)* 100
+otooley_percent = (vote_4_otooley/total_votes) * 100
+
+# Print statements (moved to end of code for cleaner look)
+print(f"Election Results")
+print(f"----------------")
+print(f"Total Votes: {total_votes}")
+print(f"----------------")
+print(f"Khan: {khan_percent:.3f}% ({vote_4_Kahn})")
+print(f"Correy: {correy_percent:.3f}% ({vote_4_correy})")
+print(f"Li: {li_percent:.3f}% ({vote_4_li})")
+print(f"O'Tooley: {otooley_percent:.3f}% ({vote_4_otooley})")
+print(f"----------------")
+print(f"Winner: {key}")
+print(f"----------------")
