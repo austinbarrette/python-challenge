@@ -1,0 +1,26 @@
+import os
+import csv
+
+csvpath = os.path.join('..','Resources','budget_data.csv')
+
+#create two lists for dates and revenue
+dates = []
+revenue = []
+change_in_revenue = []
+
+
+# open with path variable, new line data
+with open(csvpath, newline='') as csvfile:
+        csvreader =csv.reader(csvfile,delimiter=",")
+
+        #Read & skip the header row first
+        csv_header = next(csvreader)
+        
+        #Print Header
+        print("                  ")
+        print("Financial Analysis")
+        print("------------------")
+
+        #Prints number of row in column one
+        row_count = sum(1 for row in csvreader)
+        print("Total Months: " + str(row_count))
